@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 var version string = "dev"
@@ -48,8 +50,26 @@ func main() {
 	if unused := app.DetectUnused(skipRegexp); len(unused) > 0 {
 		for _, t := range unused {
 			fmt.Printf("unused %s %s at %s line %d\n",
-				t.KindName(), t.Name, t.SourceFile, t.SourceLine)
+				kindName(t.Kind), t.Name, t.SourceFile, t.SourceLine)
 		}
 		os.Exit(1)
 	}
+}
+
+func kindName(kind ast.DefinitionKind) string {
+	switch kind {
+	case ast.Scalar:
+		return "scalar"
+	case ast.Object:
+		return "type"
+	case ast.Interface:
+		return "interface"
+	case ast.Union:
+		return "union"
+	case ast.Enum:
+		return "enum"
+	case ast.InputObject:
+		return "input"
+	}
+	panic("unpexected")
 }

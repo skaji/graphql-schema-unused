@@ -5,12 +5,17 @@ schema {
 type Query {
   a: Boolean!
   foo: Foo
+  ider: Ider
 }
 
 type Foo implements Ider {
   id: Int!
   hoge(input: HogeInput): Boolean!
   bar: Bar!
+}
+
+type Baz implements Ider {
+  id: Int!
 }
 
 type Bar {

@@ -21,24 +21,6 @@ type Type struct {
 	Fields     []*Field
 }
 
-func (t *Type) KindName() string {
-	switch t.Kind {
-	case ast.Scalar:
-		return "scalar"
-	case ast.Object:
-		return "type"
-	case ast.Interface:
-		return "interface"
-	case ast.Union:
-		return "union"
-	case ast.Enum:
-		return "enum"
-	case ast.InputObject:
-		return "input"
-	}
-	panic("unpexected")
-}
-
 type Field struct {
 	Name      string
 	Type      string
@@ -133,13 +115,17 @@ func (a *App) DetectUnused(skip *regexp.Regexp) []*Type {
 	var walk func(t *Type)
 	walk = func(t *Type) {
 		seen[t.Name] = true
+		if t.Kind == ast.Interface {
+			for _, t2 := range a.types {
+				if !seen[t2.Name] && slices.Contains(t2.Interfaces, t.Name) {
+					walk(t2)
+				}
+			}
+		}
 		for _, u := range t.Union {
 			if !seen[u] {
 				walk(a.types.Get(u))
 			}
-		}
-		for _, i := range t.Interfaces {
-			seen[i] = true // XXX
 		}
 		for _, f := range t.Fields {
 			if strings.HasPrefix(f.Type, "__") {
