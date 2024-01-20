@@ -89,17 +89,6 @@ func (a *App) Load(paths ...string) error {
 	}
 	types := make(Types, len(ds))
 	for i, d := range ds {
-		types[i] = &Type{
-			Name:       d.Name,
-			Kind:       d.Kind,
-			Union:      d.Types,
-			Interfaces: d.Interfaces,
-			BuiltIn:    d.BuiltIn,
-			SourceLine: d.Position.Line,
-			SourceFile: d.Position.Src.Name,
-		}
-	}
-	for i, d := range ds {
 		fs := make([]*Field, len(d.Fields))
 		for j, f := range d.Fields {
 			args := make([]*Argument, len(f.Arguments))
@@ -121,7 +110,16 @@ func (a *App) Load(paths ...string) error {
 		slices.SortFunc(fs, func(a, b *Field) int {
 			return strings.Compare(a.Name, b.Name)
 		})
-		types[i].Fields = fs
+		types[i] = &Type{
+			Name:       d.Name,
+			Kind:       d.Kind,
+			Union:      d.Types,
+			Interfaces: d.Interfaces,
+			BuiltIn:    d.BuiltIn,
+			SourceLine: d.Position.Line,
+			SourceFile: d.Position.Src.Name,
+			Fields:     fs,
+		}
 	}
 	slices.SortFunc(types, func(a, b *Type) int {
 		return strings.Compare(a.Name, b.Name)
