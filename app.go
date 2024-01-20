@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"os"
+	"regexp"
 	"slices"
 	"strings"
 
@@ -70,7 +70,7 @@ func (a *App) Load(paths ...string) error {
 	for i, path := range paths {
 		b, err := os.ReadFile(path)
 		if err != nil {
-			return fmt.Errorf("%s: %w", path, err)
+			return err
 		}
 		sources[i] = &ast.Source{
 			Name:    path,
@@ -128,7 +128,7 @@ func (a *App) Load(paths ...string) error {
 	return nil
 }
 
-func (a *App) DetectUnused() []*Type {
+func (a *App) DetectUnused(skip *regexp.Regexp) []*Type {
 	seen := map[string]bool{}
 	var walk func(t *Type)
 	walk = func(t *Type) {
@@ -165,6 +165,9 @@ func (a *App) DetectUnused() []*Type {
 	}
 	var unused Types
 	for _, t := range a.types {
+		if skip != nil && skip.MatchString(t.Name) {
+			continue
+		}
 		if !seen[t.Name] && !t.BuiltIn {
 			unused = append(unused, t)
 		}

@@ -39,6 +39,15 @@ unused type Animal at schema.graphql line 14
 1
 ```
 
+If you want some types not to be detected as unused, then use `-skip` option:
+
+```
+❯ graphql-schema-unused -skip '^Animal$' schema.graphql
+
+❯ echo $?
+0
+```
+
 # Author
 
 Shoichi Kaji

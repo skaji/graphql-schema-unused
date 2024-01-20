@@ -27,6 +27,7 @@ enum Enum1 {
   B
 }
 
-interface Ider {
+# foo
+interface Ider { # bar
   id: Int!
 }
