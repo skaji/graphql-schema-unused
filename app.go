@@ -17,7 +17,7 @@ type Type struct {
 	SourceFile string
 	SourceLine int
 	Union      []string
-	Interfaces []string
+	Implements []string
 	Fields     []*Field
 }
 
@@ -96,7 +96,7 @@ func (a *App) Load(paths ...string) error {
 			Name:       d.Name,
 			Kind:       d.Kind,
 			Union:      d.Types,
-			Interfaces: d.Interfaces,
+			Implements: d.Interfaces,
 			BuiltIn:    d.BuiltIn,
 			SourceLine: d.Position.Line,
 			SourceFile: d.Position.Src.Name,
@@ -117,7 +117,7 @@ func (a *App) DetectUnused(skip *regexp.Regexp) []*Type {
 		seen[t.Name] = true
 		if t.Kind == ast.Interface {
 			for _, t2 := range a.types {
-				if !seen[t2.Name] && slices.Contains(t2.Interfaces, t.Name) {
+				if !seen[t2.Name] && slices.Contains(t2.Implements, t.Name) {
 					walk(t2)
 				}
 			}

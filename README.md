@@ -31,7 +31,7 @@ type Animal {
 
 Then:
 
-```shell
+```
 ❯ graphql-schema-unused schema.graphql
 unused type Animal at schema.graphql line 14
 
