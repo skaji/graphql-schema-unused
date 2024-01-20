@@ -1,0 +1,32 @@
+schema {
+  query: Query
+}
+
+type Query {
+  a: Boolean!
+  foo: Foo
+}
+
+type Foo implements Ider {
+  id: Int!
+  hoge(input: HogeInput): Boolean!
+  bar: Bar!
+}
+
+type Bar {
+  a: Int!
+}
+
+input HogeInput {
+  a: Int!
+}
+
+scalar Scalar1
+enum Enum1 {
+  A
+  B
+}
+
+interface Ider {
+  id: Int!
+}
