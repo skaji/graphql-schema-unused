@@ -17,4 +17,6 @@ jobs:
         with:
           go-version-file: go.mod
       - uses: golangci/golangci-lint-action@v3
+        with:
+          skip-cache: true
       - run: go test ./...
