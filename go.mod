@@ -1,6 +1,6 @@
 module github.com/skaji/graphql-schema-unused
 
-go 1.21
+go 1.22.0
 
 require github.com/vektah/gqlparser/v2 v2.5.11
 
