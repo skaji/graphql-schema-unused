@@ -21,7 +21,7 @@ jobs:
         with:
           go-version: "${{ steps.go-version.outputs.go-version }}"
           check-latest: true
-      - uses: golangci/golangci-lint-action@v3
+      - uses: golangci/golangci-lint-action@v4
         with:
           skip-cache: true
           args: --verbose --timeout=5m
