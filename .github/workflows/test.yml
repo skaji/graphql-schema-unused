@@ -24,4 +24,5 @@ jobs:
       - uses: golangci/golangci-lint-action@v3
         with:
           skip-cache: true
+          args: --verbose --timeout=5m
       - run: go test ./...
