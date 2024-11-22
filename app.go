@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"regexp"
 	"slices"
 	"strings"
 
@@ -110,7 +109,7 @@ func (a *App) Load(paths ...string) error {
 	return nil
 }
 
-func (a *App) DetectUnused(skip *regexp.Regexp) []*Type {
+func (a *App) DetectUnused() []*Type {
 	seen := map[string]bool{}
 	var walk func(t *Type)
 	walk = func(t *Type) {
@@ -151,9 +150,6 @@ func (a *App) DetectUnused(skip *regexp.Regexp) []*Type {
 	}
 	var unused Types
 	for _, t := range a.types {
-		if skip != nil && skip.MatchString(t.Name) {
-			continue
-		}
 		if !seen[t.Name] && !t.BuiltIn {
 			unused = append(unused, t)
 		}

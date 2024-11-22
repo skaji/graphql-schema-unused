@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"slices"
 
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -47,7 +48,14 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	if unused := app.DetectUnused(skipRegexp); len(unused) > 0 {
+
+	unused := app.DetectUnused()
+	if skipRegexp != nil {
+		unused = slices.DeleteFunc(unused, func(t *Type) bool {
+			return skipRegexp.MatchString(t.Name)
+		})
+	}
+	if len(unused) > 0 {
 		for _, t := range unused {
 			fmt.Printf("unused %s %s at %s line %d\n",
 				kindName(t.Kind), t.Name, t.SourceFile, t.SourceLine)
